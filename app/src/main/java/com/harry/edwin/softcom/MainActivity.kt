@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayout
 import com.harry.edwin.softcom.extras.SelectDateFragment
 import com.harry.edwin.softcom.form.adapters.FormPagerAdapter
 import com.harry.edwin.softcom.form.models.Element
+import com.harry.edwin.softcom.form.models.Rule
 import com.harry.edwin.softcom.form.viewmodel.FormViewModel
 import kotlinx.android.synthetic.main.content_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,9 +51,9 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
 
     val ids_ by lazy {   mutableMapOf<Int, Element>() }
     val answers by lazy {   mutableMapOf<Int, String>() }
+    val rules by lazy {   mutableMapOf<Int, Int>() }
     var idsList_ =  mutableListOf<Pair<Int,Element>>()
 
-    var lastPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,13 +78,13 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
                             section.elements.forEach {
                                     element ->
                                         if(element.type.equals("text")){
-                                            ids_.put(textId.removeAt(0), element)
+                                            ids_[textId.removeAt(0)] = element
                                         }else if(element.type.equals("formattednumeric")){
-                                            ids_.put(numbersId.removeAt(0), element)
+                                            ids_[numbersId.removeAt(0)] = element
                                         }else if(element.type.equals("datetime")){
-                                            ids_.put(datesId.removeAt(0), element)
+                                            ids_[datesId.removeAt(0)] = element
                                         }else if(element.type.equals("yesno")){
-                                            ids_.put(yesNoId.removeAt(0), element)
+                                            ids_[yesNoId.removeAt(0)] = element
                                         }
                             }
                     }
@@ -92,7 +93,24 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
 
         ids_.forEach { entry ->
             answers.put(entry.key, "")
+            if (entry.value.rules.isNotEmpty()){
+
+
+                rule = gson.fromJson(entry.value.rules.first().toString(), Rule::class.java)
+                ruleId = entry.key
+//                Log.v("Ebuka", rule.targets.toString())
+//                rules.put(entry.key, rule)
+            }else{
+                Log.v("Ebuka","${rule.targets.first()} - ${entry.value.unique_id}")
+                if (entry.value.unique_id.equals(rule.targets.first())){
+                    rules.put(ruleId, entry.key)
+                }
+                rule = Rule()
+            }
+
         }
+
+        myModel.rulesLiveData.value = rules
         myModel.idLiveData.value = ids_
         myModel.answersLiveData.value = answers
         idsList_.addAll(ids_.toList())
@@ -111,6 +129,9 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
 
 
     }
+
+    var rule : Rule = Rule()
+    var ruleId  = 0
 
     fun getId() : Pair<Int, Element>{
         return idsList_.removeAt(0)

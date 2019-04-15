@@ -33,6 +33,12 @@ import java.lang.Exception
 
 
 
+
+
+
+
+
+
 val POSITION  = "position"
 val NUMOFTABS = "num_tabs"
 class FormFragent : Fragment(), DateSetListener {
@@ -382,6 +388,33 @@ class FormFragent : Fragment(), DateSetListener {
         setRadioGroupAttr(rg)
 
         rg.id = (activity as MainActivity).getId().first
+
+        rg.setOnCheckedChangeListener {
+                radioGroup, i ->
+                    val EditTextId = sharedViewModel.rulesLiveData.value?.get(rg.id)
+
+                    val checkedRadioButton = radioGroup.findViewById(i) as RadioButton
+                    val isChecked = checkedRadioButton.isChecked
+
+                    if (isChecked)
+                    {
+                        Log.v("Ebuka","here $EditTextId ${sharedViewModel.rulesLiveData.value}")
+                        val isYes = checkedRadioButton.text.equals("Yes")
+                        if (isYes){
+
+                            EditTextId?.let { mView.findViewById<EditText>(it).visibility = View.VISIBLE }
+
+                        }else{
+
+                            EditTextId?.let { mView.findViewById<EditText>(it).visibility = View.INVISIBLE }
+                        }
+
+                    }else{
+
+                    }
+
+
+        }
         radioGroupLayout.addView(textView)
         radioGroupLayout.addView(rg)
 
