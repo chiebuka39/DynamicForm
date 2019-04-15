@@ -29,7 +29,11 @@ import com.harry.edwin.softcom.interfaces.DateSetListener
 import java.lang.Exception
 
 
+
+
+
 val POSITION  = "position"
+val NUMOFTABS = "num_tabs"
 class FormFragent : Fragment(), DateSetListener {
     override fun populateSetDate(yr: Int, mon: Int, dy: Int) {
         this.year = yr
@@ -39,14 +43,16 @@ class FormFragent : Fragment(), DateSetListener {
     }
 
     companion object {
-        fun newInstance(position:Int) = FormFragent().apply {
+        fun newInstance(position:Int, numOfTabs : Int) = FormFragent().apply {
             arguments = Bundle().apply {
                 putInt(POSITION,position)
+                putInt(NUMOFTABS, numOfTabs)
             }
         }
     }
 
     var mPosition = 0
+    var mLastPosition = 0
     var mPage: Page? = null
     val sharedViewModel by sharedViewModel<FormViewModel>()
 
@@ -61,6 +67,7 @@ class FormFragent : Fragment(), DateSetListener {
 
         arguments.let {
             mPosition = it?.getInt(POSITION, 0)!!
+            mLastPosition = it.getInt(NUMOFTABS, 0) - 1
         }
     }
 
@@ -86,12 +93,16 @@ class FormFragent : Fragment(), DateSetListener {
             addTextViews(section.label, 15f)
             addSection(section)
         }
+        if (mLastPosition == mPosition){
+            addSubmitButton()
+        }
 
         sharedViewModel.selectedDate.observe(this, androidx.lifecycle.Observer {
-                date ->
-            val textView = view.findViewById<TextView>(date.first)
+                datePair ->
+            val textView = view.findViewById<TextView>(datePair.first)
             try {
-                textView.text = date.second
+                textView.text = datePair.second
+
             }catch (e:Exception){
 
             }
@@ -99,12 +110,32 @@ class FormFragent : Fragment(), DateSetListener {
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun addSubmitButton() {
+
+        val submitButton = Button(activity)
+        submitButton.text = "submit"
 
 
-
+        setSubmitButtonAttributes(submitButton)
+        linearLayout.addView(submitButton)
     }
+
+    private fun setSubmitButtonAttributes(submitButton: Button) {
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        params.setMargins(
+            convertDpToPixel(16f),
+            convertDpToPixel(16f),
+            convertDpToPixel(16f),
+            0
+        )
+
+        submitButton.layoutParams = params
+    }
+
 
     private fun addSection(section: Section){
         section.elements.forEach {

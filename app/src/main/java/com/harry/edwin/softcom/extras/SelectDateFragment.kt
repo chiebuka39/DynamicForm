@@ -21,7 +21,7 @@ class SelectDateFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     private var context_: Context? = null
 
     interface OnDateReceiveCallBack {
-        fun onDateReceive(dd: Int, mm: Int, yy: Int)
+        fun onDateReceive(yy: Int, mm: Int, dd: Int)
     }
 
 

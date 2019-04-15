@@ -22,13 +22,13 @@ import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBack {
-    override fun onDateReceive(dd: Int, mm: Int, yy: Int) {
+    override fun onDateReceive(yy: Int, mm: Int, dd: Int) {
 
         val id = myModel.selectedDate.value?.first
 
 
         try {
-            myModel.selectedDate.value = Pair(id!!, "$yy-$mm-$yy")
+            myModel.selectedDate.value = Pair(id!!, "$yy-$mm-$dd")
         }catch (e:Exception){
 
         }
@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
     val ids_ by lazy {   mutableMapOf<String, Int>() }
     var idsList_ =  mutableListOf<Pair<String,Int>>()
 
+    var lastPage = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -60,12 +62,6 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
         val form = gson.fromJson(readJSONFromAsset("pet_adoption-1"), FormData::class.java)
 
         myModel.setFormDataLiveData(form)
-
-        //create a mutable list of pages
-        // create a Map of the label and id
-        // Create a Map of the label and content
-        // In the fragment make observe the live data for changes
-
 
 
         for (k in 0 until form.pages.size) {

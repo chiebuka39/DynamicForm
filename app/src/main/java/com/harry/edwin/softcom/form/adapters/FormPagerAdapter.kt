@@ -9,7 +9,7 @@ class FormPagerAdapter(val fm: FragmentManager,val numOfTabs: Int) : FragmentSta
 
 
     override fun getItem(position: Int): Fragment {
-        return FormFragent.newInstance(position);
+        return FormFragent.newInstance(position, numOfTabs);
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
