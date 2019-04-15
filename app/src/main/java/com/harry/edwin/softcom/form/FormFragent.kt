@@ -225,7 +225,7 @@ class FormFragent : Fragment(), DateSetListener {
     private fun setImageViewAttributes(imageView: ImageView, element: Element){
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
-            200
+            400
         )
 
         params.setMargins(
