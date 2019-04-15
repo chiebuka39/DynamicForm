@@ -120,6 +120,20 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
         viewPager.offscreenPageLimit = 2
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
 
+        tabs.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+        })
+
         if (tabs.tabCount == 2) {
             tabs.tabMode = TabLayout.MODE_FIXED
         } else {
