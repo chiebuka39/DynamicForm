@@ -23,6 +23,7 @@ import com.harry.edwin.softcom.form.models.Section
 import java.util.*
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.core.widget.addTextChangedListener
 import com.harry.edwin.softcom.MainActivity
 import com.harry.edwin.softcom.extras.SelectDateFragment
 import com.harry.edwin.softcom.interfaces.DateSetListener
@@ -80,9 +81,11 @@ class FormFragent : Fragment(), DateSetListener {
         return inflater.inflate(R.layout.form_fragent_fragment, container, false)
     }
 
+    lateinit var mView: View
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mView = view
         year = calendar.get(Calendar.YEAR)
         month = calendar.get(Calendar.MONTH)
         day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -102,23 +105,51 @@ class FormFragent : Fragment(), DateSetListener {
             val textView = view.findViewById<TextView>(datePair.first)
             try {
                 textView.text = datePair.second
+                if (datePair.second.isNotEmpty()){
+                    sharedViewModel.answersLiveData.value?.set(datePair.first, datePair.second)
+                }
 
             }catch (e:Exception){
 
             }
         })
+        Log.v("Ebuka", sharedViewModel.answersLiveData.value?.toString())
 
     }
 
     private fun addSubmitButton() {
 
         val submitButton = Button(activity)
-        submitButton.text = "submit"
+        submitButton.text = getString(R.string.submit)
+        val errors = mutableListOf<String>()
+
+        submitButton.setOnClickListener {
+
+           Log.v("Ebuka", sharedViewModel.answersLiveData.value?.toString())
+
+            sharedViewModel.idLiveData.value?.forEach {
+                entry ->
+                    val answer = sharedViewModel.answersLiveData.value?.get(entry.key)
+                    if(entry.value.isMandatory){
+                        if (answer?.isEmpty()!!){
+                            errors.add("${entry.value.label} should not be empty")
+                        }
+                    }
+            }
+
+            if (errors.size > 0){
+                Toast.makeText(context, "Please fill in all the fields", Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(context, "Yo have successfully put in all your values", Toast.LENGTH_LONG).show()
+            }
+        }
 
 
         setSubmitButtonAttributes(submitButton)
         linearLayout.addView(submitButton)
     }
+
+
 
     private fun setSubmitButtonAttributes(submitButton: Button) {
         val params = LinearLayout.LayoutParams(
@@ -176,11 +207,16 @@ class FormFragent : Fragment(), DateSetListener {
         if (element.type.equals("formattednumeric")){
             editText.inputType = InputType.TYPE_CLASS_NUMBER
 
-            editText.id = (activity as MainActivity).getId().second
+            editText.id = (activity as MainActivity).getId().first
         }else{
             editText.inputType = InputType.TYPE_CLASS_TEXT
 
-            editText.id = (activity as MainActivity).getId().second
+            editText.id = (activity as MainActivity).getId().first
+        }
+
+        editText.addTextChangedListener {
+            text ->
+                sharedViewModel.answersLiveData.value?.set(editText.id, text.toString())
         }
 
         setEditTextAttributes(editText)
@@ -205,9 +241,6 @@ class FormFragent : Fragment(), DateSetListener {
     }
 
     private fun addImageToLayout(element: Element) {
-
-
-
 
         val imageViewLayout = LinearLayout(activity)
         imageViewLayout.orientation = LinearLayout.VERTICAL
@@ -285,7 +318,7 @@ class FormFragent : Fragment(), DateSetListener {
         val dateText = TextView(activity)
         pickDate.text = element.label
         dateText.text = ""
-        dateText.id =  (activity as MainActivity).getId().second
+        dateText.id =  (activity as MainActivity).getId().first
 
         pickDate.setOnClickListener {
             val newFragment = SelectDateFragment()
@@ -348,7 +381,7 @@ class FormFragent : Fragment(), DateSetListener {
         }
         setRadioGroupAttr(rg)
 
-        rg.id = (activity as MainActivity).getId().second
+        rg.id = (activity as MainActivity).getId().first
         radioGroupLayout.addView(textView)
         radioGroupLayout.addView(rg)
 

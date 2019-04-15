@@ -15,6 +15,7 @@ import java.io.IOException
 import com.google.android.material.tabs.TabLayout
 import com.harry.edwin.softcom.extras.SelectDateFragment
 import com.harry.edwin.softcom.form.adapters.FormPagerAdapter
+import com.harry.edwin.softcom.form.models.Element
 import com.harry.edwin.softcom.form.viewmodel.FormViewModel
 import kotlinx.android.synthetic.main.content_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,8 +48,9 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
 
     private val myModel by viewModel<FormViewModel>()
 
-    val ids_ by lazy {   mutableMapOf<String, Int>() }
-    var idsList_ =  mutableListOf<Pair<String,Int>>()
+    val ids_ by lazy {   mutableMapOf<Int, Element>() }
+    val answers by lazy {   mutableMapOf<Int, String>() }
+    var idsList_ =  mutableListOf<Pair<Int,Element>>()
 
     var lastPage = 0
 
@@ -75,19 +77,24 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
                             section.elements.forEach {
                                     element ->
                                         if(element.type.equals("text")){
-                                            ids_.put(element.unique_id, textId.removeAt(0))
+                                            ids_.put(textId.removeAt(0), element)
                                         }else if(element.type.equals("formattednumeric")){
-                                            ids_.put(element.unique_id, numbersId.removeAt(0))
+                                            ids_.put(numbersId.removeAt(0), element)
                                         }else if(element.type.equals("datetime")){
-                                            ids_.put(element.unique_id, datesId.removeAt(0))
+                                            ids_.put(datesId.removeAt(0), element)
                                         }else if(element.type.equals("yesno")){
-                                            ids_.put(element.unique_id, yesNoId.removeAt(0))
+                                            ids_.put(yesNoId.removeAt(0), element)
                                         }
                             }
                     }
 
         }
+
+        ids_.forEach { entry ->
+            answers.put(entry.key, "")
+        }
         myModel.idLiveData.value = ids_
+        myModel.answersLiveData.value = answers
         idsList_.addAll(ids_.toList())
 
 
@@ -105,7 +112,7 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
 
     }
 
-    fun getId() : Pair<String, Int>{
+    fun getId() : Pair<Int, Element>{
         return idsList_.removeAt(0)
     }
 
