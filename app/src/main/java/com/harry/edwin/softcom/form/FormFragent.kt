@@ -1,5 +1,6 @@
 package com.harry.edwin.softcom.form
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,6 +26,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.widget.addTextChangedListener
 import com.harry.edwin.softcom.MainActivity
+import com.harry.edwin.softcom.SuccessActivity
 import com.harry.edwin.softcom.extras.SelectDateFragment
 import com.harry.edwin.softcom.interfaces.DateSetListener
 import java.lang.Exception
@@ -150,6 +152,7 @@ class FormFragent : Fragment(), DateSetListener {
                 Toast.makeText(context, "Please fill in all the fields", Toast.LENGTH_LONG).show()
             }else{
                 Toast.makeText(context, "Yo have successfully put in all your values", Toast.LENGTH_LONG).show()
+                activity?.startActivity(Intent(activity, SuccessActivity::class.java))
             }
         }
 
