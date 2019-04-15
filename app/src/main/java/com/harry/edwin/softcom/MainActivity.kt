@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity(), SelectDateFragment.OnDateReceiveCallBa
 //                Log.v("Ebuka", rule.targets.toString())
 //                rules.put(entry.key, rule)
             }else{
-                Log.v("Ebuka","${rule.targets.first()} - ${entry.value.unique_id}")
                 if (entry.value.unique_id.equals(rule.targets.first())){
                     rules.put(ruleId, entry.key)
                 }

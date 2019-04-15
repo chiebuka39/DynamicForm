@@ -137,13 +137,16 @@ class FormFragent : Fragment(), DateSetListener {
                 entry ->
                     val answer = sharedViewModel.answersLiveData.value?.get(entry.key)
                     if(entry.value.isMandatory){
+
                         if (answer?.isEmpty()!!){
+
                             errors.add("${entry.value.label} should not be empty")
                         }
                     }
             }
 
             if (errors.size > 0){
+
                 Toast.makeText(context, "Please fill in all the fields", Toast.LENGTH_LONG).show()
             }else{
                 Toast.makeText(context, "Yo have successfully put in all your values", Toast.LENGTH_LONG).show()
@@ -403,10 +406,11 @@ class FormFragent : Fragment(), DateSetListener {
                         if (isYes){
 
                             EditTextId?.let { mView.findViewById<EditText>(it).visibility = View.VISIBLE }
-
+                            sharedViewModel.answersLiveData.value?.set(rg.id, "yes")
                         }else{
 
                             EditTextId?.let { mView.findViewById<EditText>(it).visibility = View.INVISIBLE }
+                            sharedViewModel.answersLiveData.value?.set(rg.id, "no")
                         }
 
                     }else{
