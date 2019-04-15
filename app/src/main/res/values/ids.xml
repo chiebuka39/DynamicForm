@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="text_1" />
+    <item type="id" name="text_2" />
+    <item type="id" name="text_3" />
+    <item type="id" name="text_4" />
+    <item type="id" name="text_5" />
+    <item type="id" name="text_6" />
+    <item type="id" name="text_7" />
+    <item type="id" name="text_8" />
+
+
+    <item type="id" name="formattednumeric_1" />
+    <item type="id" name="formattednumeric_2" />
+    <item type="id" name="formattednumeric_3" />
+    <item type="id" name="formattednumeric_4" />
+    <item type="id" name="formattednumeric_5" />
+    <item type="id" name="formattednumeric_6" />
+    <item type="id" name="formattednumeric_7" />
+    <item type="id" name="formattednumeric_8" />
+
+
+    <item type="id" name="datetime_1" />
+    <item type="id" name="datetime_2" />
+    <item type="id" name="datetime_3" />
+    <item type="id" name="datetime_4" />
+    <item type="id" name="datetime_5" />
+
+    <item type="id" name="yesno_1" />
+    <item type="id" name="yesno_2" />
+    <item type="id" name="yesno_3" />
+    <item type="id" name="yesno_4" />
+    <item type="id" name="yesno_5" />
+
+    <item type="id" name="embeddedphoto_1" />
+    <item type="id" name="embeddedphoto_2" />
+    <item type="id" name="embeddedphoto_3" />
+    <item type="id" name="embeddedphoto_4" />
+    <item type="id" name="embeddedphoto_5" />
+
+</resources>
